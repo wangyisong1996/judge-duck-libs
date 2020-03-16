@@ -275,8 +275,12 @@ extern "C" int _stdduck_peek() {
 	return stdin_pos == stdin_end ? EOF : *stdin_pos;
 }
 
-// TODO: Support ungetc
+// TODO: Fully support ungetc
 int ungetc(int c, FILE *f) {
-	return EOF;
+	if (f==stdin && stdin_pos != stdin_start && stdin_pos[-1] == c) {
+		stdin_pos--; return c;
+	} else {
+		return EOF;
+	}
 }
 
