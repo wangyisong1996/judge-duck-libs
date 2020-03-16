@@ -275,8 +275,14 @@ extern "C" int _stdduck_peek() {
 	return stdin_pos == stdin_end ? EOF : *stdin_pos;
 }
 
-// TODO: Support ungetc
+// Fake implementation, can only push back the last char read
 int ungetc(int c, FILE *f) {
+	if (f == stdin) {
+		if (stdin_pos != stdin_start && stdin_pos[-1]==c) {
+			stdin_pos--;
+			return c;
+		}
+	}
 	return EOF;
 }
 
